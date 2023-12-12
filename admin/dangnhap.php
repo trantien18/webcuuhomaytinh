@@ -11,7 +11,7 @@
         <h2></h2>
         <div class="container" id="container">
         <div class="form-container sign-up-container">
-            <form action="register.php" method="POST">
+            <form action="#" method="POST">
             <h1>Đăng Ký</h1>
             <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>

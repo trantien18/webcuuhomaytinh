@@ -1,5 +1,5 @@
 <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto" style="font-size: 14px;">
             <?php
             require 'connect.php';
                     $query=mysqli_query($conn,"select * from  tbl_menu");

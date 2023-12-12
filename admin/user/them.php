@@ -1,4 +1,5 @@
 <?php
+session_start();
                     $username = "root"; // Khai báo username
                     $password = "";      // Khai báo password
                     $server   = "localhost";   // Khai báo server
@@ -7,42 +8,43 @@
                     include '../../connect.php';
 
                     //Khai báo giá trị ban đầu, nếu không có thì khi chưa submit câu lệnh insert sẽ báo lỗi
-                    $TenSanPham = "";
-                    $Anh = "";
-                    $Gia= "";
-                    $Mota="";
-                    $tenchitiet="";
+                    $LastName = "";
+                    $Email = "";
+                    $Password= "";
 
                     //Lấy giá trị POST từ form vừa submit
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                        if(isset($_POST["TenSanPham"])) { $TenSanPham= $_POST['TenSanPham']; }
-                        if(isset($_POST["Anh"])) { $Anh = $_POST['Anh']; }
-                        if(isset($_POST["Gia"])) { $Gia = $_POST['Gia']; }
-                        
-                        if(isset($_POST["Mota"])) { $Mota= $_POST['Mota']; }
-                        if(isset($_POST["tenchitiet"])) { $tenchitiet = $_POST['tenchitiet']; }
-                    }
-
+                        if(isset($_POST["LastName"])) { $LastName= $_POST['LastName']; }
+                        if(isset($_POST["Email"])) { $Email = $_POST['Email']; }
+                        if(isset($_POST["Password"])) { $Password = $_POST['Password']; }
+                        // Kiểm tra xem tên đăng nhập đã tồn tại hay chưa
+                        $query = "SELECT * FROM tbl_user WHERE LastName='$LastName' or Email='$Email'";
+                        $result = mysqli_query($conn, $query);
+                        if (mysqli_num_rows($result) > 0) {
+                            $_SESSION['error_message'] = "Tên đăng nhập hoặc email đã tồn tại. Vui lòng chọn tên khác.". $conn->error;
+                            header("Location: themuser.php"); // Chuyển hướng trở lại trang nhập
+                        }
+                        else{
+                        // Mã hóa mật khẩu sử dụng MD5
+                        $hashedPassword = md5($Password);
                         //Code xử lý, insert dữ liệu vào table
-                        if (!empty($TenSanPham) && !empty($Anh) && !empty($Gia) && !empty($Mota)&& !empty($tenchitiet)){
-                        $sql = "INSERT INTO sanpham (TenSanPham, Anh, Gia, Mota, tenchitiet)
-                        VALUES ('$TenSanPham', '$Anh', '$Gia', '$Mota', '$tenchitiet' )";
-
+                        if (!empty($LastName) && !empty($Email) && !empty($Password) ){
+                        $sql = "INSERT INTO tbl_user (LastName, Email, Password)
+                        VALUES ('$LastName', '$Email', '$hashedPassword' )";
                             if ($conn->query($sql) === TRUE) {
                                 $message = "Thêm thành công!";
                                 echo "<script type='text/javascript'>alert('$message');</script>";
-                                 header('Location: ../index.php'); // Chuyển hướng đến trang chủ
+                                 header('Location: quanlyuser.php');
                                     exit(); // Ngừng thực thi script
-                                } else {
-                                    echo "Lỗi khi Thêm Sản Phẩm " . $sql . "<br>" . $conn->error;
-                                }
+                                } 
+                            }
+                            else {
+                                $_SESSION['error_message'] = "Vui lòng điền đầy đủ thông tin! " . $conn->error;
+                                header('Location: themuser.php');        
+                                }  
                         }
-                else {
-                        echo "Vui lòng điền đầy đủ thông tin sản phẩm";
-                        
-                  
-                                   
-                    }  
-                    //Đóng database
-                    $conn->close();
-                    ?>
+                    }
+
+                        //Đóng database
+                        $conn->close();
+                        ?>

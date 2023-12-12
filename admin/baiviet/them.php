@@ -2,46 +2,42 @@
                     $username = "root"; // Khai báo username
                     $password = "";      // Khai báo password
                     $server   = "localhost";   // Khai báo server
-                    $dbname   = "web";      // Khai báo database
+                    $dbname   = "data";      // Khai báo database
 
                     include '../../connect.php';
 
                     //Khai báo giá trị ban đầu, nếu không có thì khi chưa submit câu lệnh insert sẽ báo lỗi
-                    $TenSanPham = "";
-                    $Anh = "";
-                    $Gia= "";
-                    $Mota="";
-                    $tenchitiet="";
-
+                    $title = "";
+                    $shorten= "";
+                    $content="";
+                    $id_danhmuc="";
+                    $img="";
+                    
                     //Lấy giá trị POST từ form vừa submit
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                        if(isset($_POST["TenSanPham"])) { $TenSanPham= $_POST['TenSanPham']; }
-                        if(isset($_POST["Anh"])) { $Anh = $_POST['Anh']; }
-                        if(isset($_POST["Gia"])) { $Gia = $_POST['Gia']; }
-                        
-                        if(isset($_POST["Mota"])) { $Mota= $_POST['Mota']; }
-                        if(isset($_POST["tenchitiet"])) { $tenchitiet = $_POST['tenchitiet']; }
+                        if(isset($_POST["title"])) { $title = $_POST['title']; }
+                        if(isset($_POST["shorten"])) { $shorten = $_POST['shorten']; }
+                        if(isset($_POST["content"])) { $content= $_POST['content']; }
+                        if(isset($_POST["id_danhmuc"])) { $id_danhmuc = $_POST['id_danhmuc']; }
+                        if(isset($_POST["img"])) { $img = $_POST['img']; }
+                        $selectedSection = $_POST['id_danhmuc'];
                     }
-
                         //Code xử lý, insert dữ liệu vào table
-                        if (!empty($TenSanPham) && !empty($Anh) && !empty($Gia) && !empty($Mota)&& !empty($tenchitiet)){
-                        $sql = "INSERT INTO sanpham (TenSanPham, Anh, Gia, Mota, tenchitiet)
-                        VALUES ('$TenSanPham', '$Anh', '$Gia', '$Mota', '$tenchitiet' )";
+                        if ( !empty($title) && !empty($shorten) && !empty($content) && !empty($img) && !empty($id_danhmuc) ){
+                        $sql = "INSERT INTO tbl_post ( title, shorten, content ,id_danhmuc, img)
+                        VALUES ('$title', '$shorten', '$content' ,'$id_danhmuc','$img' )";
 
                             if ($conn->query($sql) === TRUE) {
                                 $message = "Thêm thành công!";
                                 echo "<script type='text/javascript'>alert('$message');</script>";
-                                 header('Location: ../index.php'); // Chuyển hướng đến trang chủ
+                                 header('Location: quanlybaiviet.php'); // Chuyển hướng đến trang chủ
                                     exit(); // Ngừng thực thi script
                                 } else {
-                                    echo "Lỗi khi Thêm Sản Phẩm " . $sql . "<br>" . $conn->error;
+                                    echo "Lỗi khi Thêm " . $sql . "<br>" . $conn->error;
                                 }
                         }
                 else {
-                        echo "Vui lòng điền đầy đủ thông tin sản phẩm";
-                        
-                  
-                                   
+                        echo "Vui lòng điền đầy đủ thông tin sản phẩm";                         
                     }  
                     //Đóng database
                     $conn->close();

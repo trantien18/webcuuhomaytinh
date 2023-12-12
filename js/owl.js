@@ -230,7 +230,7 @@
 		dragClass: 'owl-drag',
 		itemClass: 'owl-item',
 		stageClass: 'owl-stage',
-		stageOuterClass: 'owl-stage-outer',
+		stageOuterClass: '',
 		grabClass: 'owl-grab'
 	};
 
